@@ -2,6 +2,7 @@
 
 from random import shuffle
 from os import system
+import time
 ''' 该模块内的函数只适合在模块内是使用，不适合其它模块或函数调用。
 '''
 def get_non_negative_integer():
@@ -43,6 +44,7 @@ def main():
     '''
     old_n = 3
     for i in range(1,11):#最多重复十次
+        #
         print "{:2}".format(i),"*"*40
 
         n = get_non_negative_integer();
@@ -54,6 +56,17 @@ def main():
         else:         #否则，结束循环
             break
         show_schulte(get_schulte(n))
+
+        # 计算用户完成这张舒尔特表的时间
+        time0 = time.time() # 输出舒尔特表时的系统时间
+        # 以回车作为用户完成舒尔特表的信号
+        raw_input("please press [enter] after finished the schulte grid.")
+        time1 = time.time()  # 用户完成舒尔特表时的系统时间
+
+        # 向用户反馈完成这张舒尔特表所用的时间
+        time_delta = round(time1 - time0,2)
+        print " {:4} seconds".format(time_delta)
+
     print "Bye!"
     system("pause")
 
