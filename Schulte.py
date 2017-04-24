@@ -3,6 +3,9 @@
 from random import shuffle
 from os import system
 import time
+from datetime import datetime
+import json
+
 ''' 该模块内的函数只适合在模块内是使用，不适合其它模块或函数调用。
 '''
 def get_non_negative_integer():
@@ -39,10 +42,32 @@ def show_schulte(schulte):
             print " {:<3}".format(cell),
         print "\n"
 
+
+
+def write_recod(dic_key,list_key,item):
+    ''' 将新纪录写入文件
+    '''
+    f = open("resources\\grades.json")
+    records = json.load(f) #！！！可能抛出异常2017-04-17 星期一
+    f.close()
+
+    if dic_key not in records:
+        records[dic_key]={}
+
+    records[dic_key][list_key]=item
+    f = open("resources\\grades.json","w")
+    json.dump(records, f, indent = 2)
+    self_format(records,f)
+    f.close()
+
+
+
 def main():
     ''' 程序入口函数
     '''
     old_n = 3
+    start_time = datetime.now().strftime("%H:%M:%S")
+    time_list = []      # 字典数组，每章舒尔特表对应一个字典，记录舒尔特表的行数及所用时间
     for i in range(1,11):#最多重复十次
         #
         print "{:2}".format(i),"*"*40
@@ -66,6 +91,14 @@ def main():
         # 向用户反馈完成这张舒尔特表所用的时间
         time_delta = round(time1 - time0,2)
         print " {:4} seconds".format(time_delta)
+
+        #
+        time_list.append({"rows":n, "time":time_delta})
+
+    # 程序退出前将所有记录写入文件保存之。
+    time_as_list_key = datetime.now().strftime("{} -- %H:%M:%S").format(start_time)
+    date_as_dict_key = datetime.now().strftime("%Y-%m-%d")
+    write_recod(date_as_dict_key, time_as_list_key, time_list)
 
     print "Bye!"
     system("pause")
